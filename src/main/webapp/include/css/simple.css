@@ -1,0 +1,17 @@
+table {
+    border: outset .2rem green;
+}
+caption {
+    font-size: larger;
+    font-weight: bold;
+    color: #000099;
+    order: outset .18rem #000099;
+}
+th { color: #000088 }
+th, td { border: groove .14rem gray }
+.value {
+    font-weight: bold;
+    font-style: italic;
+    color: #007700
+}
+.important { text-decoration: underline }
