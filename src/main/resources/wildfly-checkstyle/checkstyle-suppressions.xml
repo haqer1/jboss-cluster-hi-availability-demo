@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+	<!-- Have made a few tweaks based on the following rule: Line has trailing spaces. [RegexpSingleline] -->
+	<!-- On the other hand, I'm not against tabs: -->
+	<suppress checks="FileTabCharacter"
+            files="."/> <!-- .+/test/.+__.+\.java$ -->
+</suppressions>

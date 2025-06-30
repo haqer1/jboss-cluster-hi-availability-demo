@@ -1,0 +1,100 @@
+package resat.sabiq.jboss.cluster.hi.availability.demo;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.MessageFormat;
+import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+
+/**
+ * @author	Reşat SABIQ
+ */
+public class AbstractTestTemplate {
+	protected static final int GET_REQUEST_COUNT = 50;
+	private static final float SUCCESS_RATIO_THRESHOLD = (float) 0.02;
+
+	private static final DateTimeFormatter timestampFormatter
+		= DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+	protected static final NumberFormat percentFormat
+		= NumberFormat.getPercentInstance(java.util.Locale.FRANCE);
+	protected static final Runtime runtime = Runtime.getRuntime();
+	private static final String SCRIPT_FOLDER = "src/test/bash/";
+	/**
+	 * Formatters usable repeatedly (even though that doesn't matter for testing).
+	 */
+	protected static final MessageFormat reusableLogfileFormatter
+		= new MessageFormat("target/log/curl.{0}.log");
+	private static final MessageFormat reusableGrepWcFormatter
+		= new MessageFormat("grep \"Resat est très bon\" {0} | wc -l");
+
+	static {
+		percentFormat.setMinimumFractionDigits(2);
+	}
+
+	protected static String logFile;
+
+	protected static String generateTimestamp() {
+		final LocalDateTime date = LocalDateTime.now();
+		return date.format(timestampFormatter);
+	}
+
+	protected static float toSuccessRatio(int matchesCount) {
+		return (float)matchesCount / GET_REQUEST_COUNT;
+	}
+
+	private static String getMatchesCount(final String logFile)
+			throws IOException, InterruptedException, ExecutionException {
+		final String resultCmd = reusableGrepWcFormatter.format(new Object[] { logFile });
+		final String[] resultCmdViaBash = new String[] { "/bin/sh", "-c", resultCmd };
+		System.out.println(Arrays.toString(resultCmdViaBash));
+		final Process p = runtime.exec(resultCmdViaBash);
+		System.out.println(p.toString() + ' ' + System.getProperty("user.dir"));
+		p.onExit().get();
+		final String matchesCount;
+		try (final BufferedReader bf
+				= new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+			matchesCount = bf.readLine();
+		}
+		return matchesCount;
+	}
+
+	protected static int analyzeResults(final String logFile)
+			throws IOException, InterruptedException, ExecutionException {
+		final String matchesStr = getMatchesCount(logFile);
+		final int matchesCount = Integer.valueOf(matchesStr);
+		System.out.println("Matches: " + matchesCount);
+
+		final float successRatio = toSuccessRatio(matchesCount);
+		assertTrue(successRatio > SUCCESS_RATIO_THRESHOLD,
+				"Success ratio: " +percentFormat.format(successRatio)+ " (for " +GET_REQUEST_COUNT
+					+ " requests) (and a ratio below "
+					+ percentFormat.format(SUCCESS_RATIO_THRESHOLD)
+					+ " likely indicates a (configuration) problem.");
+		return matchesCount;
+	}
+
+	protected int execTestScriptAndReturnMatchesCount(final String script)
+			throws IOException, InterruptedException, ExecutionException {
+		final String execId = generateTimestamp();
+		logFile = reusableLogfileFormatter.format(new Object[] {execId});
+		System.out.println(logFile);
+		final String[] testCmd
+			= new String[] {SCRIPT_FOLDER+script, execId, String.valueOf(GET_REQUEST_COUNT)};
+		final Process p = runtime.exec(testCmd);
+		p.onExit().get();
+
+		assertEquals(0, p.exitValue());
+
+		System.out.println("Analyzing results...");
+
+		final int matchesCount = analyzeResults(logFile);
+		return matchesCount;
+	}
+}
