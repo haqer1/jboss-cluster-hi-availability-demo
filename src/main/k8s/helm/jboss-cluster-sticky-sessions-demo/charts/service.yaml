@@ -1,0 +1,13 @@
+image:
+  name: docker.io/adazes/jboss-cluster-sticky-sessions-demo
+  tag: "0.6"
+  pullPolicy: IfNotPresent
+build:
+  enabled: false # Disable S2I build
+deploy:
+  route:
+    enabled: false # Disable OpenShift Route
+  replicas: 2
+  ingress:
+    enabled: true #Enable Ingress resource creation
+    host: wildfly-plugin-helm-ingress-demo # <YOUR-EXPOSED-DNS-NAME>
