@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -22,7 +23,10 @@ import java.util.concurrent.ExecutionException;
 public class AbstractTestTemplate {
 	protected static final int GET_REQUEST_COUNT = 50;
 	private static final float SUCCESS_RATIO_THRESHOLD = (float) 0.02;
-	private static final String TEST_EXEC_ID_FILE_PATH = "target/log/testExecId.txt";
+	private static final class Paths {
+		private static final String LOG_DIR = "target/log/";
+		private static final String TEST_EXEC_ID_FILE = LOG_DIR + "testExecId.txt";
+	}
 
 	private static final DateTimeFormatter timestampFormatter
 		= DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
@@ -52,7 +56,9 @@ public class AbstractTestTemplate {
 	 * @throws IOException
 	 */
 	private static void writeTestExecId(String execId) throws IOException {
-		Files.write(Path.of(TEST_EXEC_ID_FILE_PATH), execId.getBytes()
+		Files.createDirectories(Path.of(Paths.LOG_DIR)
+			, PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------")));
+		Files.write(Path.of(Paths.TEST_EXEC_ID_FILE), execId.getBytes()
 				, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
 	}
 
