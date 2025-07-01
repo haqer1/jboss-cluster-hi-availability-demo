@@ -17,7 +17,7 @@ class AbstractReplicationTest extends AbstractStickySessionsOrReplicationTestBas
 		+ ' ' +percentFormat.format(FAIR_SHARE_LIMIT)+ '.';
 	private static String FAIR_SHARE_DEFICIT_ERR_MSG = """
 		First server instance must have ratio of requests handled that is at least its fair
-		share minus """
+		share plus-minus """
 		+ ' ' +percentFormat.format(FAIR_SHARE_LIMIT)+ '.';
 	private static String DATA_REPLICATION_ERR_MSG
 		= "With replication the data is expected to be there on each instance called.";
