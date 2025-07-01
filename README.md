@@ -24,6 +24,8 @@ head -n 3 src/main/k8s/helm/jboss-cluster-sticky-sessions-demo/charts/service.ya
 Install the image (same image is used for sticky-sessions approach (section 2)):
 
 ```console
+sudo $(minikube ip) wildfly-plugin-helm-ingress-demo >> /etc/hosts
+
 helm install jboss-cluster-sticky-sessions-demo \
 	-f src/k8s/jboss-cluster-sticky-sessions-demo/charts/service.yaml \
 		--repo https://docs.wildfly.org/wildfly-charts wildfly
@@ -45,13 +47,21 @@ tail -f target/log/curl.$(cat target/log/testExecId.txt).log
 ```
 
 ## 2) Sticky Sessions (without replication)
-Let's add ingress for sticky-sessions on the basis of the code deployed in prior section.
+It's possible to expose the deployment as a new service:
 
 ```console
+kubectl expose deployment jboss-cluster-sticky-sessions-demo --type=NodePort --port=8080 --name=jboss-cluster-sticky-sessions-4-deployment-demo
+```
+
+And then one can add ingress for sticky-sessions on the basis of the code deployed in prior section, exposed as a new service above:
+
+```console
+sudo $(minikube ip) sticky-sessions-ingress-demo >> /etc/hosts
+
 kubectl apply -f src/main/k8s/ingress/sticky-sessions.yaml
 ```
-Wait until address is displayed for *jboss-cluster-sticky-session-ingress* in the following
-	command's output:
+Wait until address is displayed for *jboss-cluster-sticky-session-ingress* in the 1st of the following
+	commands' output:
 
 ```console
 while [ -z "$ip" ]; do sleep .5 && \
