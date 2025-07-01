@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jboss-cluster-replication-ingress
+  namespace: containerized-apps
+spec:
+  # kubectl get ingressclass/nginx -o=jsonpath='{.metadata.name}'
+  ingressClassName: nginx
+  rules:
+    - host: load-balancing-replication-ingress-demo # parfait.info
+      http:
+        paths:
+          - path: /jboss-cluster-ha-demo
+            pathType: Prefix
+            backend:
+              service:
+                name: jboss-cluster-hi-availability-service-demo
+                port:
+                  number: 8080
