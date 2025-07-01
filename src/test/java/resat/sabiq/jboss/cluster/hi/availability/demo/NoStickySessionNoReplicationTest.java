@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class NoStickySessionNoReplicationTest extends AbstractTestTemplate {
 	private static String DATA_PRESENCE_ERR_MSG = """
 			With no sticky sessions & no replication sometimes data is expected to not be
-			there on the instance called.""";
+			there on the container called.""";
 	@Test
 	void givenSessionWithData_whenNumerousRequests_someRequestsDontHaveSessionData()
 			throws IOException, InterruptedException, ExecutionException {
