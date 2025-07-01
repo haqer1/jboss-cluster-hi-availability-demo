@@ -18,7 +18,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                # or jboss-cluster-sticky-sessions-demo (jboss-cluster-replication-demo)
-                name: jboss-cluster-sticky-sessions-4-deployment-demo
+                # or jboss-cluster-sticky-sessions-4-deployment-demo (jboss-cluster-replication-demo)
+                name: jboss-cluster-sticky-sessions-demo
                 port:
                   number: 8080
