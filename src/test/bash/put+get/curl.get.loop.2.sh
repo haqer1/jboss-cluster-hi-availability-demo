@@ -21,5 +21,5 @@ for i in $(seq 1 $request_count); do echo $i >> $logfile && curl -b $cookie_jar 
    -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0' \
    --insecure \
    -i >> $logfile \
-   && sleep 2s; \
+   && sleep .9; \
    done
