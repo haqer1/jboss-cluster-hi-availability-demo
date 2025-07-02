@@ -68,6 +68,18 @@ helm install jboss-cluster-sticky-sessions-demo \
 		--repo https://docs.wildfly.org/wildfly-charts wildfly
 ```
 
+One can be notified as soon as the deployment is ready to use by running something like the
+following command:
+
+```console
+while \
+    running=$(kubectl get pods -o \
+        jsonpath="{.items[*].status.containerStatuses[*].state}" | \
+            grep running); \
+    [ -z "$running" ]; \
+    do sleep .5; done && echo $running
+```
+
 ### 1.3) Automated testing
 Run test:
 
@@ -83,6 +95,24 @@ Analyzing results...
 Matches: 24  
 Success rate < 100% as expected for 50 requests: 48,00 %  
 [INFO] **Tests run: 1**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 48.71 s
+
+### 1.4) Using from browser
+You can also use the webapp
+[from browser](http://wildfly-plugin-helm-ingress-demo/jboss-cluster-ha-demo): however, after
+setting the data, it will only show up in get.jsp if the container host(name) is the same as that
+having been shown on put.jsp **and** the cookie used while setting the data is passed on to get.jsp.
+So, e.g., if data is set by host 10.244.0.10 & load-balancing dispatches get.jsp request to host
+10.244.0.9, that different host will not have the data **&** will respond with a different cookie,
+so even subsequent get.jsp requests dispatched to host 10.244.0.10 will no longer find the data.
+This is why it's much better to test these kinds of things with tools like cUrl, which is what the
+automated test does (just like those in the subsequent sections). And this issue encountered with
+plain load-balancing is resolved by both sticky sessions approach & replication approach, discussed
+in sections 2) & 3)...
+
+### 1.5) Video
+Feel free to also (download and) take a look at a WEBM
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/1.load-balancing-demo.webm "Load-Balancing WEBM video") (7m 46s) providing an illustration of the steps in this section
+(the 1st of 4).
 
 ## 2) Sticky Sessions (without replication)
 
