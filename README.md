@@ -1,13 +1,14 @@
 # JBoss Cluster High Availability Demo
-JBoss (WildfFly) cluster load balancing, sticky sessions &amp; high availability demo
+This demo covers the topics of clustering, load balancing, sticky sessions &amp; high availability
+on JBoss (WildfFly).
+
+The demo app puts cookies in session in put.jsp, & then tests that they can be retrieved in get.jsp,
+in the context of clusters with several server containers.
 
 ```console
 minikube start -p jboss-cluster-hi-availability-demo \
 	--addons=metrics-server,ingress,dashboard --memory='5242mb'
 ```
-
-The sample puts a cookie in session in put.jsp, & then tests that it can be retrieved in get.jsp,
-in the context of clusters with several server containers.
 
 Before reading any or all of the 4 sections, please keep in mind that during or after automated
 testing doable in each of the 4 sections you can optionally **view logs** as follows:
@@ -200,13 +201,6 @@ first server IP: 172.28.5.4
 firstServerLoadRatio=0.32 vs. min. 0.23333335 & max. 0.43333334 (requests handled: 16)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.74 s
 
-View logs (optional):
-
-```shell
-cat target/log/curl.put.$(cat target/log/testExecId.txt).log
-
-tail -f target/log/curl.$(cat target/log/testExecId.txt).log
-```
 ### 3.3) Kubernetes Solution
 Standalone full HA config is used here: "full" meaning webapps, persistence, EJB, JMS, etc. The
 same can be done in domain mode also, but would require just a little bit more effort. This approach
@@ -405,61 +399,59 @@ sed -n "$last_line_number,\$p" target/log/curl.20250701-232801.log
 And the (2nd half of the) log output by the last command confirms propagation of data deletion
 across the cluster:
 
-```html
-load-balancing-replication-ingress-demo	FALSE	/jboss-cluster-ha-demo	FALSE	0	JSESSIONID	ujXREpahv1Z3ohtYK3ebgRWqHBzjNlniK10cHyOj.jboss-cluster-hi-availability-demo-b9767db86-nhgsl
-1
-HTTP/1.1 200 OK
-Date: Tue, 01 Jul 2025 21:38:45 GMT
-Content-Type: text/html;charset=UTF-8
-Content-Length: 797
-Connection: keep-alive
-X-Powered-By: JSP/3.1
+	load-balancing-replication-ingress-demo	FALSE	/jboss-cluster-ha-demo	FALSE	0	JSESSIONID	ujXREpahv1Z3ohtYK3ebgRWqHBzjNlniK10cHyOj.jboss-cluster-hi-availability-demo-b9767db86-nhgsl
+	1
+	HTTP/1.1 200 OK
+	Date: Tue, 01 Jul 2025 21:38:45 GMT
+	Content-Type: text/html;charset=UTF-8
+	Content-Length: 797
+	Connection: keep-alive
+	X-Powered-By: JSP/3.1
+	
+	
+	<html lang="fr">
+	    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="include/css/simple.css" type="text/css" />
+	     </head>
+	    <body>
+		<h2>Lecture depuis session</h2>
+	<table>
+	    <caption>Serveur</caption>
+	    <tr>
+		<th>Adresse IP</th><th>Nom hôte</th>
+	    </tr>
+	    <tr>
+		<td class="value">10.244.0.14</td>
+		<td class="value">jboss-cluster-hi-availability-demo-b9767db86-mwnsn</td>
+	    </tr>
+	</table>
+	<table>
+	    <caption>Attributs session</caption>
+	    <tr>
+		<th>Attribut(s)</th><th>Valeur(s)</th>
+	    </tr>
+	    <tr>
+		<td>(Date &amp;) Heure (de session)</td>
+		<td class="value">null</td>
+	    </tr>
+	    <tr>
+		<td>Développeur &amp; qualification</td>
+		<td class="value">null null</td>
+	    </tr>
+	</table>
+	    </body>
+	</html>
+	2
+	HTTP/1.1 200 OK
+	...
+		<td class="value">10.244.0.13</td>
+	...
+		<td>Développeur &amp; qualification</td>
+		<td class="value">null null</td>
+	...
 
-
-<html lang="fr">
-    <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" href="include/css/simple.css" type="text/css" />
-     </head>
-    <body>
-	<h2>Lecture depuis session</h2>
-<table>
-    <caption>Serveur</caption>
-    <tr>
-	<th>Adresse IP</th><th>Nom hôte</th>
-    </tr>
-    <tr>
-	<td class="value">10.244.0.14</td>
-	<td class="value">jboss-cluster-hi-availability-demo-b9767db86-mwnsn</td>
-    </tr>
-</table>
-<table>
-    <caption>Attributs session</caption>
-    <tr>
-	<th>Attribut(s)</th><th>Valeur(s)</th>
-    </tr>
-    <tr>
-	<td>(Date &amp;) Heure (de session)</td>
-	<td class="value">null</td>
-    </tr>
-    <tr>
-	<td>Développeur &amp; qualification</td>
-	<td class="value">null null</td>
-    </tr>
-</table>
-    </body>
-</html>
-2
-HTTP/1.1 200 OK
-...
-	<td class="value">10.244.0.13</td>
-...
-	<td>Développeur &amp; qualification</td>
-	<td class="value">null null</td>
-...
-```
-
-### 4) Super-Extra Credit: Scaling (& Retesting)
+## 4) Super-Extra Credit: Scaling (& Retesting)
 Scaling up (or, subsequently, down) & retesting is really in the category of super-extra credit, but
 here here goes scaling up & restesting anyway. :)
 
