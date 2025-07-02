@@ -7,20 +7,37 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Facilitates code re-use for replication tests.
+ *
  * @author	Reşat SABIQ
  */
-class AbstractReplicationTest extends AbstractStickySessionsOrReplicationTestBase {
-	private static float FAIR_SHARE_LIMIT = .1f;
-	private static String FAIR_SHARE_EXCESS_ERR_MSG = """
-		First server instance must have ratio of requests handled that is no more than its fair
-		share plus """
-		+ ' ' +percentFormat.format(FAIR_SHARE_LIMIT)+ '.';
-	private static String FAIR_SHARE_DEFICIT_ERR_MSG = """
-		First server instance must have ratio of requests handled that is at least its fair
-		share plus-minus """
-		+ ' ' +percentFormat.format(FAIR_SHARE_LIMIT)+ '.';
-	private static String DATA_REPLICATION_ERR_MSG
+abstract class AbstractReplicationTest extends AbstractStickySessionsOrReplicationTestBase {
+	/**
+	 * Facilitates fair-share load assertions, whether there are 2 containers or 2000 or 2 million
+	 * in the cluster.
+	 *
+	 * @author Reşat SABIQ
+	 */
+	private static class FairShare {
+		private static float LIMIT = .1f;
+		private static float UPPER_PERCENTAGE = 1 + LIMIT;
+		private static float LOWER_PERCENTAGE = 1 - LIMIT;
+		private static final class ErrorMessage {
+			private static final String FORMAT = "First server container in the cluster must"
+					+ " have ratio of requests handled that is %s %s of its fair share"
+					+ " (container loads are equally weighted: e.g., %s %s for 10 containers).";
+			private static final String EXCESS_MESSAGE = String.format(FORMAT
+					, "no more than",	percentFormat.format(FairShare.UPPER_PERCENTAGE)
+					, "maximum", "11%");
+			private static final String DEFICIT_MESSAGE = String.format(FORMAT
+					, "at least",		percentFormat.format(FairShare.LOWER_PERCENTAGE)
+					, "minimum", "9%");
+		}
+	}
+	private static final String DATA_REPLICATION_ERR_MSG
 		= "With replication the data is expected to be there on each instance called.";
+	private static final String FIRST_SERVER_LOAD_RATIO_MSG_FORMAT
+		= "first server load ratio=%s vs. min. %s & max. %s (requests handled: %s)%n";
 
 	private short numberOfServerInstances;
 
@@ -35,16 +52,16 @@ class AbstractReplicationTest extends AbstractStickySessionsOrReplicationTestBas
 	 * @throws IOException
 	 */
 	@Test
-	void givenSessionWithData_whenNumerousRequests_1stServerHandlesFairSharePlusMinus10PercentOfRequests()
+	void givenSessionWithData_when50Requests_then1stServerHandlesBetween90And110PercentOfFairShare()
 			throws IOException {
 		int ipMatchesCount = calculateCountOfRequestsHandledByServerInstanceThatHandled1stRequest();
 		float proportion = (float)1/numberOfServerInstances;
-		float maxRatio = proportion + FAIR_SHARE_LIMIT;
-		float minRatio = proportion - FAIR_SHARE_LIMIT;
+		float maxRatio = proportion * FairShare.UPPER_PERCENTAGE;
+		float minRatio = proportion * FairShare.LOWER_PERCENTAGE;
 		float firstServerLoadRatio = (float)ipMatchesCount/GET_REQUEST_COUNT;
-		System.out.printf("firstServerLoadRatio=%s vs. min. %s & max. %s (requests handled: %s)%n"
+		System.out.printf(FIRST_SERVER_LOAD_RATIO_MSG_FORMAT
 				, firstServerLoadRatio, minRatio, maxRatio, ipMatchesCount);
-		assertTrue(firstServerLoadRatio <= maxRatio, FAIR_SHARE_EXCESS_ERR_MSG);
-		assertTrue(firstServerLoadRatio >= minRatio, FAIR_SHARE_DEFICIT_ERR_MSG);
+		assertTrue(firstServerLoadRatio <= maxRatio, FairShare.ErrorMessage.EXCESS_MESSAGE);
+		assertTrue(firstServerLoadRatio >= minRatio, FairShare.ErrorMessage.DEFICIT_MESSAGE);
 	}
 }

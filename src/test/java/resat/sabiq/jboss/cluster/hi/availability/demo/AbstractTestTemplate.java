@@ -18,22 +18,24 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 /**
+ * Provides common operations for automated tests.
+ *
  * @author	Reşat SABIQ
  */
-public class AbstractTestTemplate {
+public abstract class AbstractTestTemplate {
 	protected static final int GET_REQUEST_COUNT = 50;
 	private static final float SUCCESS_RATIO_THRESHOLD = (float) 0.02;
 	private static final class Paths {
 		private static final String LOG_DIR = "target/log/";
 		private static final String TEST_EXEC_ID_FILE = LOG_DIR + "testExecId.txt";
 	}
+	private static final String SCRIPT_FOLDER = "src/test/bash/";
 
 	private static final DateTimeFormatter timestampFormatter
 		= DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
 	protected static final NumberFormat percentFormat
 		= NumberFormat.getPercentInstance(java.util.Locale.FRANCE);
 	protected static final Runtime runtime = Runtime.getRuntime();
-	private static final String SCRIPT_FOLDER = "src/test/bash/";
 	/**
 	 * Formatters usable repeatedly (even though that doesn't matter for testing).
 	 */

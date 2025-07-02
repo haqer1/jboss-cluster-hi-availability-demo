@@ -12,9 +12,11 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Facilitates code re-use for sticky-sessions and replication tests.
+ *
  * @author	Reşat SABIQ
  */
-class AbstractStickySessionsOrReplicationTestBase extends AbstractTestTemplate {
+abstract class AbstractStickySessionsOrReplicationTestBase extends AbstractTestTemplate {
 	private static final Pattern ipPattern = Pattern.compile(">((\\d{1,3}+\\.){3}\\d{1,3}+)<");
 	private static final byte IP_GROUP = 1;
 
