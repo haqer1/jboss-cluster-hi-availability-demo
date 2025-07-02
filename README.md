@@ -9,8 +9,8 @@ minikube start -p jboss-cluster-hi-availability-demo \
 The sample puts a cookie in session in put.jsp, & then tests that it can be retrieved in get.jsp,
 in the context of clusters with several server containers.
 
-Before reading any or all of the 3 sections, please keep in mind that during or after automated
-testing doable in each of the 3 sections you can optionally **view logs** as follows:
+Before reading any or all of the 4 sections, please keep in mind that during or after automated
+testing doable in each of the 4 sections you can optionally **view logs** as follows:
 
 ```shell
 cat target/log/curl.put.$(cat target/log/testExecId.txt).log
@@ -174,6 +174,8 @@ docker push localhost:5000/jboss-cluster-hi-availability-demo:0.7
 ```
 
 ### 3.2) Pure Docker Solution
+Standalone HA config is used here.
+
 You can deploy pure-Docker-based replication solution (with a cluster of 3 server containers)
 using the following command:
 
@@ -206,8 +208,10 @@ cat target/log/curl.put.$(cat target/log/testExecId.txt).log
 tail -f target/log/curl.$(cat target/log/testExecId.txt).log
 ```
 ### 3.3) Kubernetes Solution
-Standalone full HA config is used here. The same is doable in domain mode also, but would require a
-bit more effort.
+Standalone full HA config is used here: "full" meaning webapps, persistence, EJB, JMS, etc. The
+same can be done in domain mode also, but would require just a little bit more effort. This approach
+could be considered to be between, for instance, Spring Boot on one hand & traditional domain setups
+on the other (appearing quite close to Spring Boot end of the continuum)...
 
 Before starting, you can stop & remove pure-Docker-based replication solution using the following command:
 
@@ -311,9 +315,201 @@ first server IP: 10.244.0.14
 firstServerLoadRatio=0.52 vs. min. 0.4 & max. 0.6 (requests handled: 26)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.70 s
 
-### 3.4) Extra Credit (optional)
-There is also delete.jsp, also linked from the welcome page. Feel free to confirm that deletion also
-works as expected (propagating across the cluster in replication setup), which is especially
-applicable to Replication approach. For instance, you could access the pages via browser (keeping in
+### 3.4) Extra Credit: Replication of Data Deletion
+There is also delete.jsp, linked as well from the welcome page. Feel free to confirm that deletion
+also works as expected, which is especially noteworthy in Replication approach, where deletion also
+propagates across the cluster. For instance, you could access the pages via browser (keeping in
 mind that for connection to current host to be closed a certain delay (apparently at least 1 minute)
-is required between user requests).
+is required between user requests). However, that could be boring... One would probably rather use
+commands like the following (here for testing with Ingress load-balancing as discussed above).
+
+The script calls 1, 2 & 3 of the following snippet make a new session with data (on 1 container) and
+then lead to the access to the data across the cluster:
+
+```console
+src/test/bash/curl.init-session.0.sh 20250701-232801 load-balancing-replication-ingress-demo \
+	&& src/test/bash/put+get/curl.put.1.sh 20250701-232801 load-balancing-replication-ingress-demo #1-2
+src/test/bash/put+get/curl.get.loop.2.sh 20250701-232801 load-balancing-replication-ingress-demo 4 #3
+
+cat target/log/curl.20250701-232801.log
+```
+
+The log output by the last command confirms data replication across the cluster:
+
+```html
+load-balancing-replication-ingress-demo	FALSE	/jboss-cluster-ha-demo	FALSE	0	JSESSIONID	ujXREpahv1Z3ohtYK3ebgRWqHBzjNlniK10cHyOj.jboss-cluster-hi-availability-demo-b9767db86-nhgsl
+1
+HTTP/1.1 200 OK
+Date: Tue, 01 Jul 2025 21:32:17 GMT
+Content-Type: text/html;charset=UTF-8
+Content-Length: 870
+Connection: keep-alive
+X-Powered-By: JSP/3.1
+
+
+<html lang="fr">
+    <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="include/css/simple.css" type="text/css" />
+     </head>
+    <body>
+	<h2>Lecture depuis session</h2>
+<table>
+    <caption>Serveur</caption>
+    <tr>
+	<th>Adresse IP</th><th>Nom hôte</th>
+    </tr>
+    <tr>
+	<td class="value">10.244.0.13</td>
+	<td class="value">jboss-cluster-hi-availability-demo-b9767db86-nhgsl</td>
+    </tr>
+</table>
+<table>
+    <caption>Attributs session</caption>
+    <tr>
+	<th>Attribut(s)</th><th>Valeur(s)</th>
+    </tr>
+    <tr>
+	
+	<td>(Date &amp;) Heure (de session)</td>
+	<td class="value">Tue Jul 01 21:29:25 GMT 2025</td>
+    </tr>
+    <tr>
+	<td>Développeur &amp; qualification</td>
+	<td class="value">Resat est très bon, y compris en clustering (grappelage).</td>
+    </tr>
+</table>
+    </body>
+</html>
+2
+HTTP/1.1 200 OK
+...
+	<td class="value">10.244.0.14</td>
+...
+	<td>Développeur &amp; qualification</td>
+	<td class="value">Resat est très bon, y compris en clustering (grappelage).</td>
+...
+```
+The script calls C & D of the following snippet delete the data (on 1 container) and then
+lead to the attempts to access to the data across the cluster:
+
+```console
+last_line_number=$(wc -l target/log/curl.20250701-232801.log | cut -d ' ' -f 1) #A
+((last_line_number++)) #B
+src/test/bash/curl.delete.3.sh 20250701-232801 load-balancing-replication-ingress-demo #C
+src/test/bash/put+get/curl.get.loop.2.sh 20250701-232801 load-balancing-replication-ingress-demo 4 #D
+
+sed -n "$last_line_number,\$p" target/log/curl.20250701-232801.log
+```
+
+And the (2nd half of the) log output by the last command confirms propagation of data deletion
+across the cluster:
+
+```html
+load-balancing-replication-ingress-demo	FALSE	/jboss-cluster-ha-demo	FALSE	0	JSESSIONID	ujXREpahv1Z3ohtYK3ebgRWqHBzjNlniK10cHyOj.jboss-cluster-hi-availability-demo-b9767db86-nhgsl
+1
+HTTP/1.1 200 OK
+Date: Tue, 01 Jul 2025 21:38:45 GMT
+Content-Type: text/html;charset=UTF-8
+Content-Length: 797
+Connection: keep-alive
+X-Powered-By: JSP/3.1
+
+
+<html lang="fr">
+    <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="include/css/simple.css" type="text/css" />
+     </head>
+    <body>
+	<h2>Lecture depuis session</h2>
+<table>
+    <caption>Serveur</caption>
+    <tr>
+	<th>Adresse IP</th><th>Nom hôte</th>
+    </tr>
+    <tr>
+	<td class="value">10.244.0.14</td>
+	<td class="value">jboss-cluster-hi-availability-demo-b9767db86-mwnsn</td>
+    </tr>
+</table>
+<table>
+    <caption>Attributs session</caption>
+    <tr>
+	<th>Attribut(s)</th><th>Valeur(s)</th>
+    </tr>
+    <tr>
+	<td>(Date &amp;) Heure (de session)</td>
+	<td class="value">null</td>
+    </tr>
+    <tr>
+	<td>Développeur &amp; qualification</td>
+	<td class="value">null null</td>
+    </tr>
+</table>
+    </body>
+</html>
+2
+HTTP/1.1 200 OK
+...
+	<td class="value">10.244.0.13</td>
+...
+	<td>Développeur &amp; qualification</td>
+	<td class="value">null null</td>
+...
+```
+
+### 4) Super-Extra Credit: Scaling (& Retesting)
+Scaling up (or, subsequently, down) & retesting is really in the category of super-extra credit, but
+here here goes scaling up & restesting anyway. :)
+
+```console
+kubectl get pods -o wide -n containerized-apps
+```
+
+```shell
+NAME                                                 READY   STATUS    RESTARTS   AGE   IP            NODE                                 NOMINATED NODE   READINESS GATES  
+jboss-cluster-hi-availability-demo-b9767db86-mwnsn   1/1     Running   0          8h    10.244.0.14   jboss-cluster-hi-availability-demo   <none>           <none>  
+jboss-cluster-hi-availability-demo-b9767db86-nhgsl   1/1     Running   0          8h    10.244.0.13   jboss-cluster-hi-availability-demo   <none>           <none>
+```
+
+```console
+kubectl scale deployments/jboss-cluster-hi-availability-demo --replicas=3 -n containerized-apps
+```
+
+> *deployment.apps/jboss-cluster-hi-availability-demo scaled*
+
+```console
+kubectl get pods -o wide -n containerized-apps
+```
+
+```shell
+NAME                                                 READY   STATUS    RESTARTS   AGE   IP            NODE                                 NOMINATED NODE   READINESS GATES
+jboss-cluster-hi-availability-demo-b9767db86-mwnsn   1/1     Running   0          8h    10.244.0.14   jboss-cluster-hi-availability-demo   <none>           <none>
+jboss-cluster-hi-availability-demo-b9767db86-nhgsl   1/1     Running   0          8h    10.244.0.13   jboss-cluster-hi-availability-demo   <none>           <none>
+jboss-cluster-hi-availability-demo-b9767db86-tcvck   1/1     Running   0          4s    10.244.0.15   jboss-cluster-hi-availability-demo   <none>           <none>
+```
+
+But one would have to change 2 to 3 in `KubernetesBasedReplicationTest` for the ratio of requests
+served by 1 container to be acceptable for the test to pass. The ratio would now be around 33%
+rather than 50%. If that's done (e.g., with command i), it passes (command ii below):
+
+```console
+sed -i 's/2/3/' src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/KubernetesBasedReplicationTest.java #i
+mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.KubernetesBasedReplicationTest test #ii
+```
+
+> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.**KubernetesBasedReplicationTest**  
+target/log/curl.20250702-010807.log  
+Analyzing results...  
+[/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250702-010807.log | wc -l]  
+Matches: 50  
+50/50=100,00 %  
+first server IP: 10.244.0.14  
+firstServerLoadRatio=0.34 vs. min. 0.23333335 & max. 0.43333334 (requests handled: 17)  
+[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.82 s
+
+Hope you have had as much fun reading & pondering over this as I have had working on it
+& documenting it. :)
+
+Au revoir.
