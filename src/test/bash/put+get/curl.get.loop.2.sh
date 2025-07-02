@@ -3,7 +3,6 @@ if [ -z "$execId" ] || [ -z "$website" ]; then
 	echo "Usage: $0 <execId/> <website/>"
 	exit 1
 fi
-#execId=$(date +%y-%m-%d_%H-%M-%S)
 if [ -z "$request_count" ]; then
 	request_count=50
 fi
@@ -18,7 +17,6 @@ for i in $(seq 1 $request_count); do echo $i >> $logfile && curl -b $cookie_jar 
    -H 'Connection: keep-alive' \
    -H 'Pragma: no-cache' \
    -H 'Upgrade-Insecure-Requests: 1' \
-   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0' \
    --insecure \
    -i >> $logfile \
    && sleep .9; \
