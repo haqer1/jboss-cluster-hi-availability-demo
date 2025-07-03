@@ -111,7 +111,7 @@ in sections 2) & 3)...
 
 ### 1.5) Video
 Feel free to also (download and) take a look at a WEBM
-[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/1.load-balancing-demo.webm "Load-Balancing WEBM video") (7m 46s) providing an illustration of the steps in this section
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/1.load-balancing-demo.webm "Load-Balancing WEBM video") (11m 54s) providing an illustration of the steps in this section
 (the 1st of 4).
 
 ## 2) Sticky Sessions (without replication)
