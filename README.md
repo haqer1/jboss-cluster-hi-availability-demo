@@ -6,8 +6,10 @@ The demo app puts cookies in session in put.jsp, & then tests that they can be r
 in the context of clusters with several server containers.
 
 ```console
+systemctl status docker.service # confirm that Docker service has been started
 minikube start -p jboss-cluster-hi-availability-demo \
-	--addons=metrics-server,ingress,dashboard --memory='5242mb'
+	--addons=metrics-server,ingress,dashboard --memory='5242mb' # start k8s
+minikube profile jboss-cluster-hi-availability-demo # set profile
 ```
 
 Before reading any or all of the 4 sections, please keep in mind that during or after automated
@@ -371,6 +373,12 @@ Matches: 50
 first server IP: 10.244.0.14  
 first server load ratio=0.52 vs. min. 0.45 & max. 0.55 (requests handled: 26)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.70 s
+
+#### 3.3.3) Using from browser
+You can also use the webapp
+[from browser](http://load-balancing-replication-ingress-demo/jboss-cluster-ha-demo): just as with
+pure Docker solution, after setting the data in put.jsp, the data will be available for subsequent
+requests (to get.jsp, etc.) on all server containers in the cluster (thanks to replication)...
 
 ### 3.4) Extra Credit: Replication of Data Deletion
 There is also delete.jsp, linked as well from the welcome page. Feel free to confirm that deletion
