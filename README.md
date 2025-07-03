@@ -262,7 +262,7 @@ will be available for subsequent requests (to get.jsp, etc.) on all server conta
 
 #### 3.2.3) Video
 Feel free to also (download and) take a look at a WEBM
-[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/3.2.replication-pure-Docker.webm "Replication on Pure Docker demo WEBM video")
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/3.2.replication-pure-Docker-demo.webm "Replication on pure Docker demo WEBM video")
 (14m 28s) providing an illustration of the steps in this sub-section (the 3rd of 4) (this being the
 1st of 3 videos for section 3).
 
@@ -379,6 +379,12 @@ You can also use the webapp
 [from browser](http://load-balancing-replication-ingress-demo/jboss-cluster-ha-demo): just as with
 pure Docker solution, after setting the data in put.jsp, the data will be available for subsequent
 requests (to get.jsp, etc.) on all server containers in the cluster (thanks to replication)...
+
+#### 3.3.4) Video
+Feel free to also (download and) take a look at a WEBM
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/3.3.replication-Kubernetes-demo.webm "Replication on Kubernetes demo WEBM video")
+(19m 51s) providing an illustration of the steps in this sub-section (the 3rd of 4) (this being the
+2nd of 3 videos for section 3).
 
 ### 3.4) Extra Credit: Replication of Data Deletion
 There is also delete.jsp, linked as well from the welcome page. Feel free to confirm that deletion
