@@ -365,12 +365,12 @@ first server load ratio=0.54 vs. min. 0.45 & max. 0.55 (requests handled: 27)
 
 ##### 3.3.2.2) Results with Ingress
 > [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.[KubernetesBasedReplicationTest](src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/KubernetesBasedReplicationTest.java)  
-target/log/curl.20250701-190121.log  
+target/log/curl.20250704-001921.log  
 Analyzing results...  
-[/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250701-190121.log | wc -l]  
+[/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250704-001921.log | wc -l]  
 Matches: 50  
 50/50=100,00 %  
-first server IP: 10.244.0.14  
+first server IP: 10.244.0.30  
 first server load ratio=0.52 vs. min. 0.45 & max. 0.55 (requests handled: 26)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.70 s
 
