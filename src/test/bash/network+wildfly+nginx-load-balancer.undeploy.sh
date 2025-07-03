@@ -8,3 +8,4 @@ for c in $(docker container ls -q); do
 		echo "	(doesn't match, skipped: $c)"
 	fi
 done
+docker network rm wildnetwork

@@ -267,7 +267,7 @@ on the other (appearing quite close to Spring Boot end of the continuum)...
 Before starting, you can stop & remove pure-Docker-based replication solution using the following command:
 
 ```console
-src/test/bash/network+wildfly+nginx-load-balancer.stop.sh
+src/test/bash/network+wildfly+nginx-load-balancer.undeploy.sh
 ```
 > wildfly-nginx:0.3 5dbcc300e92b  
 5dbcc300e92b  
