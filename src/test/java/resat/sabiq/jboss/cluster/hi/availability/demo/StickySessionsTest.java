@@ -18,7 +18,8 @@ class StickySessionsTest extends AbstractStickySessionsOrReplicationTestBase {
 	}
 
 	/**
-	 * For extra credit, confirm that all IPs are the same
+	 * Confirme que toutes les requêtes ont été servies par 1 seul conteneur serveur (adresse IP du
+	 * conteneur est la même pour toutes les requêtes).
 	 *
 	 * @throws IOException
 	 */

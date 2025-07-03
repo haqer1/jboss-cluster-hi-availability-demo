@@ -47,7 +47,8 @@ abstract class AbstractReplicationTest extends AbstractStickySessionsOrReplicati
 	}
 
 	/**
-	 * For extra credit, confirm that 1st server handled at most fair share + 10% of requests.
+	 * Confirme que le 1er conteneur serveur a traité entre 90% & 110% de sa (parfaitement) juste
+	 * part (e. g., entre 9% & 11% de requêtes sur une grappe de 10 conteneurs serveur).
 	 *
 	 * @throws IOException
 	 */

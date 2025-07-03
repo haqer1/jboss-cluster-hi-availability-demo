@@ -53,6 +53,14 @@ abstract class AbstractStickySessionsOrReplicationTestBase extends AbstractTestT
 		return ipMatchesCount;
 	}
 
+	/**
+	 * Montre que les données sont dispos pour toutes les requêtes servies (sur tous les conteneurs
+	 * serveur à travers la grappe).
+	 *
+	 * @throws IOException
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
 	@Test
 	void givenSessionWithData_whenNumerousRequests_allRequestsHaveSessionData()
 			throws IOException, InterruptedException, ExecutionException {

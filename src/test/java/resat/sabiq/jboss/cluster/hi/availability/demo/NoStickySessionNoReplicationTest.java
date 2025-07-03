@@ -14,6 +14,13 @@ class NoStickySessionNoReplicationTest extends AbstractTestTemplate {
 	private static String DATA_PRESENCE_ERR_MSG = """
 			With no sticky sessions & no replication sometimes data is expected to not be
 			there on the container called.""";
+
+	/**
+	 * Confirme que sans ni sessions collantes, ni réplication, les données ne sont pas dispos pour
+	 * une partie de requêtes servies à travers la grappe.
+	 *
+	 * @throws IOException
+	 */
 	@Test
 	void givenSessionWithData_whenNumerousRequests_someRequestsDontHaveSessionData()
 			throws IOException, InterruptedException, ExecutionException {

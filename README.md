@@ -87,7 +87,7 @@ Run test:
 mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.NoStickySessionNoReplicationTest test
 ```
 
-> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.**NoStickySessionNoReplicationTest**  
+> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.[NoStickySessionNoReplicationTest](src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/NoStickySessionNoReplicationTest.java)  
 /home/ek/development/projects/sandbox/demo/jboss-cluster-hi-availability-demo  
 target/log/curl.20250701-112207.log  
 Analyzing results...  
@@ -142,7 +142,7 @@ Run tests:
 mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.StickySessionsTest test
 ```
 
-> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.**StickySessionsTest**  
+> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.[StickySessionsTest](src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/AbstractStickySessionsOrReplicationTestBase.java)  
 target/log/curl.20250630-163848.log  
 Analyzing results...  
 [/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250630-163848.log | wc -l]
@@ -221,14 +221,14 @@ Run tests:
 mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.PureDockerBasedReplicationTest test
 ```
 
-> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.**PureDockerBasedReplicationTest**  
+> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.[PureDockerBasedReplicationTest](src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/PureDockerBasedReplicationTest.java)  
 target/log/curl.20250701-151600.log  
 Analyzing results...  
 [/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250701-151600.log | wc -l]  
 Matches: 50  
 50/50=100,00 %  
 first server IP: 172.28.5.4  
-firstServerLoadRatio=0.32 vs. min. 0.23333335 & max. 0.43333334 (requests handled: 16)  
+first server load ratio=0.32 vs. min. 0.3 & max. 0.366666667 (requests handled: 16)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.74 s
 
 ### 3.3) Kubernetes Solution
@@ -318,25 +318,25 @@ perhaps also due to the fact that the service itself is of `type: LoadBalancer`.
 production one would be more likely to use Ingress or something platform-specific...
 
 ##### 3.3.2.1) Results without Ingress
-> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.**KubernetesBasedReplicationTest**  
+> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.[KubernetesBasedReplicationTest](src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/KubernetesBasedReplicationTest.java)  
 target/log/curl.20250701-172147.log  
 Analyzing results...  
 [/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250701-172147.log | wc -l]  
 Matches: 50  
 50/50=100,00 %  
 first server IP: 10.244.0.14  
-firstServerLoadRatio=0.54 vs. min. 0.4 & max. 0.6 (requests handled: 27)  
+first server load ratio=0.54 vs. min. 0.45 & max. 0.55 (requests handled: 27)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.74 s
 
 ##### 3.3.2.2) Results with Ingress
-> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.**KubernetesBasedReplicationTest**  
+> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.[KubernetesBasedReplicationTest](src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/KubernetesBasedReplicationTest.java)  
 target/log/curl.20250701-190121.log  
 Analyzing results...  
 [/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250701-190121.log | wc -l]  
 Matches: 50  
 50/50=100,00 %  
 first server IP: 10.244.0.14  
-firstServerLoadRatio=0.52 vs. min. 0.4 & max. 0.6 (requests handled: 26)  
+first server load ratio=0.52 vs. min. 0.45 & max. 0.55 (requests handled: 26)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.70 s
 
 ### 3.4) Extra Credit: Replication of Data Deletion
@@ -528,7 +528,7 @@ Analyzing results...
 Matches: 50  
 50/50=100,00 %  
 first server IP: 10.244.0.14  
-firstServerLoadRatio=0.34 vs. min. 0.23333335 & max. 0.43333334 (requests handled: 17)  
+first server load ratio=0.34 vs. min. 0.3 & max. 0.366666667 (requests handled: 17)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.82 s
 
 Hope you have had as much fun reading & pondering over this as I have had working on it
