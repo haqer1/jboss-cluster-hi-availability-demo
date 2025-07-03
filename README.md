@@ -153,7 +153,7 @@ Matches: 50
 ### 2.2) Using from browser
 You can also use the webapp
 [from browser](http://sticky-sessions-ingress-demo/jboss-cluster-ha-demo): after setting the data in
-put.jsp, all subsequent requests (to get.jsp, etc.) will be dispatched to the same the server
+put.jsp, all subsequent requests (to get.jsp, etc.) will be dispatched to the same server
 container (based on cookie-based affinity)...
 
 ### 2.3) Video
@@ -162,30 +162,40 @@ Feel free to also (download and) take a look at a WEBM
 (11m 11s) providing an illustration of the steps in this section (the 2nd of 4).
 
 ## 3) Replication
-First build the app. For instance, if sticky-sessions setup is there via:
+One might want to (re)build build the app, in case there have been any changes (or build it for the
+1st time). For instance, if sticky-sessions setup is there via:
 
 ```console
-mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.StickySessionsTest -Popenshift clean package wildfly:image
+mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.StickySessionsTest -Popenshift \
+	clean package wildfly:image
 ```
 
-If not, via:
+If sticky-sessions setup isn't there, or if one wishes to skip sticky-sessions-based test, one can
+(re)build it via:
 
 ```console
 mvn -DskipTests -Popenshift clean package wildfly:image
 ```
-Then build Docker image using 1 of the 2 following commands:
+Then build the app container Docker image using 1 of the 2 following commands:
 
 ```console
 src/main/docker/jboss-cluster-replication-demo_on_widlfly/build.sh
 
-docker build -f src/main/docker/jboss-cluster-replication-demo_on_widlfly/Dockerfile --tag jboss-cluster-hi-availability-demo:0.8 .
+docker build -f src/main/docker/jboss-cluster-replication-demo_on_widlfly/Dockerfile \
+	--tag jboss-cluster-hi-availability-demo:0.8 .
 ```
 
-If you've installed helm-based service & sticky-sessions-based ingress, you can uninstall them
-before proceeding:
+Then build the nginx-based load-balancer Docker image:
 
 ```console
-kubectl delete ingress jboss-cluster-sticky-session-ingress
+src/main/docker/nginx-load-balancer/build.sh
+```
+
+If you've installed helm-based service (section 1) & sticky-sessions-based ingress (section 2), you
+can uninstall them before proceeding:
+
+```console
+kubectl delete -f src/main/k8s/ingress/sticky-sessions.yaml # or kubectl delete ingress jboss-cluster-sticky-session-ingress
 helm uninstall jboss-cluster-sticky-sessions-demo
 ```
 ### 3.1) Publication
@@ -215,7 +225,7 @@ docker tag jboss-cluster-hi-availability-demo:0.7 localhost:5000/jboss-cluster-h
 docker push localhost:5000/jboss-cluster-hi-availability-demo:0.7
 ```
 
-### 3.2) Pure Docker Solution
+### 3.2) Replication on Pure Docker
 Standalone HA config is used here.
 
 You can deploy pure-Docker-based replication solution (with a cluster of 3 server containers)
@@ -242,7 +252,13 @@ first server IP: 172.28.5.4
 first server load ratio=0.32 vs. min. 0.3 & max. 0.366666667 (requests handled: 16)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.74 s
 
-### 3.3) Kubernetes Solution
+#### 3.2.2) Using from browser
+You can also use the webapp
+[from browser](http://172.17.0.1/jboss-cluster-ha-demo): after setting the data in put.jsp, the data
+will be available for subsequent requests (to get.jsp, etc.) on all server containers in the cluster
+(thanks to replication)...
+
+### 3.3) Replication on Kubernetes
 Standalone full HA config is used here: "full" meaning webapps, persistence, EJB, JMS, etc. The
 same can be done in domain mode also, but would require just a little bit more effort. This approach
 could be considered to be between, for instance, Spring Boot on one hand & traditional domain setups
