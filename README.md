@@ -243,13 +243,13 @@ mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.PureDockerBasedReplica
 ```
 
 > [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.[PureDockerBasedReplicationTest](src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/PureDockerBasedReplicationTest.java)  
-target/log/curl.20250701-151600.log  
+target/log/curl.20250703-223735.log  
 Analyzing results...  
-[/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250701-151600.log | wc -l]  
+[/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250703-223735.log | wc -l]  
 Matches: 50  
 50/50=100,00 %  
 first server IP: 172.28.5.4  
-first server load ratio=0.32 vs. min. 0.3 & max. 0.366666667 (requests handled: 16)  
+first server load ratio=0.34 vs. min. 0.3 & max. 0.36666667 (requests handled: 17)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.74 s
 
 #### 3.2.2) Using from browser
@@ -257,6 +257,12 @@ You can also use the webapp
 [from browser](http://172.17.0.1/jboss-cluster-ha-demo): after setting the data in put.jsp, the data
 will be available for subsequent requests (to get.jsp, etc.) on all server containers in the cluster
 (thanks to replication)...
+
+#### 3.2.3) Video
+Feel free to also (download and) take a look at a WEBM
+[video](raw/refs/heads/master/assets/video/3.2.replication-pure-Docker.webm "Replication on Pure Docker demo WEBM video")
+(14m 28s) providing an illustration of the steps in this sub-section (the 3rd of 4) (this being the
+1st of 3 videos for section 3).
 
 ### 3.3) Replication on Kubernetes
 Standalone full HA config is used here: "full" meaning webapps, persistence, EJB, JMS, etc. The
