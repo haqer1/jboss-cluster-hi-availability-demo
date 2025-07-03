@@ -111,8 +111,8 @@ in sections 2) & 3)...
 
 ### 1.5) Video
 Feel free to also (download and) take a look at a WEBM
-[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/1.load-balancing-demo.webm "Load-Balancing WEBM video") (11m 54s) providing an illustration of the steps in this section
-(the 1st of 4).
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/1.load-balancing-demo.webm "Load-Balancing demo WEBM video")
+(11m 54s) providing an illustration of the steps in this section (the 1st of 4).
 
 ## 2) Sticky Sessions (without replication)
 
@@ -149,6 +149,17 @@ Analyzing results...
 Matches: 50  
 50/50=100,00 %  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 101.7 s
+
+### 2.2) Using from browser
+You can also use the webapp
+[from browser](http://sticky-sessions-ingress-demo/jboss-cluster-ha-demo): after setting the data in
+put.jsp, all subsequent requests (to get.jsp, etc.) will be dispatched to the same the server
+container (based on cookie-based affinity)...
+
+### 2.3) Video
+Feel free to also (download and) take a look at a WEBM
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/2.sticky-sessions-demo.webm "Sticky Sessions demo WEBM video")
+(11m 11s) providing an illustration of the steps in this section (the 2nd of 4).
 
 ## 3) Replication
 First build the app. For instance, if sticky-sessions setup is there via:
