@@ -392,7 +392,9 @@ also works as expected, which is especially noteworthy in Replication approach, 
 propagates across the cluster. For instance, you could access the pages via browser (keeping in
 mind that for connection to current host to be closed a certain delay (apparently at least 1 minute)
 is required between user requests). However, that could be boring... One would probably rather use
-commands like the following (here for testing with Ingress load-balancing as discussed above).
+commands like the following (here for testing on Kubernetes with Ingress-based load-balancing as
+discussed above, but it would also work equally well with pure Docker approach, or without Ingress
+for load balancing).
 
 The script calls 1, 2 & 3 of the following snippet make a new session with data (on 1 container) and
 then lead to the access to the data across the cluster:
@@ -527,6 +529,12 @@ across the cluster:
 		<td>Développeur &amp; qualification</td>
 		<td class="value">null null</td>
 	...
+
+#### 3.4.1) Video
+Feel free to also (download and) take a look at a WEBM
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/3.4.replication-of-deletion-Kubernetes-demo.webm "Replication of deletion on Kubernetes demo WEBM video")
+(6m 19s) providing an illustration of the steps in this sub-section (the 3rd of 4) (this being the
+3rd & last of 3 videos for section 3).
 
 ## 4) Super-Extra Credit: Scaling (& Retesting)
 Scaling up (or, subsequently, down) & retesting is really in the category of super-extra credit, but
