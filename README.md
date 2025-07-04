@@ -578,13 +578,13 @@ mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.KubernetesBasedReplica
 ```
 
 > [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.**KubernetesBasedReplicationTest**  
-target/log/curl.20250702-010807.log  
+target/log/curl.20250704-025702.log  
 Analyzing results...  
-[/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250702-010807.log | wc -l]  
+[/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250704-025702.log | wc -l]  
 Matches: 50  
 50/50=100,00 %  
-first server IP: 10.244.0.14  
-first server load ratio=0.34 vs. min. 0.3 & max. 0.366666667 (requests handled: 17)  
+first server IP: 10.244.0.30  
+first server load ratio=0.34 vs. min. 0.3 & max. 0.36666667 (requests handled: 17)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.82 s
 
 ### 4.2) Video
