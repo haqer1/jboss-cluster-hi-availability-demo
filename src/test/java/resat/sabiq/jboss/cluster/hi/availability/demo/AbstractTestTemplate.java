@@ -96,10 +96,9 @@ public abstract class AbstractTestTemplate {
 
 		final float successRatio = toSuccessRatio(matchesCount);
 		assertTrue(successRatio > SUCCESS_RATIO_THRESHOLD,
-				"Success ratio: " +percentFormat.format(successRatio)+ " (for " +GET_REQUEST_COUNT
-					+ " requests) (and a ratio below "
-					+ percentFormat.format(SUCCESS_RATIO_THRESHOLD)
-					+ " likely indicates a (configuration) problem.");
+				"Expected match ratio > than " +percentFormat.format(SUCCESS_RATIO_THRESHOLD)
+					+ "but it is: " +percentFormat.format(successRatio)+ " (for " +GET_REQUEST_COUNT
+					+ " requests) (this likely indicates a (configuration) problem.");
 		return matchesCount;
 	}
 
