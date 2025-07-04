@@ -567,6 +567,7 @@ jboss-cluster-hi-availability-demo-b9767db86-nhgsl   1/1     Running   0        
 jboss-cluster-hi-availability-demo-b9767db86-tcvck   1/1     Running   0          4s    10.244.0.15   jboss-cluster-hi-availability-demo   <none>           <none>
 ```
 
+### 4.1) Automated (re)testing
 But one would have to change 2 to 3 in `KubernetesBasedReplicationTest` for the ratio of requests
 served by 1 container to be acceptable for the test to pass. The ratio would now be around 33%
 rather than 50%. If that's done (e.g., with command i), it passes (command ii below):
