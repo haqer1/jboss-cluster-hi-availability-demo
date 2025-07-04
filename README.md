@@ -536,7 +536,7 @@ Feel free to also (download and) take a look at a WEBM
 (6m 19s) providing an illustration of the steps in this sub-section (the 3rd of 4) (this being the
 3rd & last of 3 videos for section 3).
 
-## 4) Super-Extra Credit: Scaling (& Retesting)
+## 4) Super-Extra Credit: Scaling (& Retesting) (on Kubernetes)
 Scaling up (or, subsequently, down) & retesting is really in the category of super-extra credit, but
 here here goes scaling up & restesting anyway. :)
 
@@ -586,6 +586,11 @@ Matches: 50
 first server IP: 10.244.0.14  
 first server load ratio=0.34 vs. min. 0.3 & max. 0.366666667 (requests handled: 17)  
 [INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.82 s
+
+### 4.2) Video
+Feel free to also (download and) take a look at a WEBM
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/4.replication-Kubernetes-scaling-and-retesting-demo.webm "Replication after scaling on Kubernetes & retesting demo WEBM video")
+(10m) providing an illustration of the steps in this sub-section (the last of of 4).
 
 Hope you have had as much fun reading & pondering over this as I have had working on it
 & documenting it. :)
