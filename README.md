@@ -310,7 +310,7 @@ while \
 		jsonpath="{.items[*].status.containerStatuses[*].state}" -n containerized-apps | \
 			grep running); \
 	[ -z "$running" ]; \
-	do sleep .5; done && echo $running
+	do echo -n . && sleep .5; done && echo && echo $running
 ```
 
 #### 3.3.1) Ingress for load-balancing (optional, but otherwise running a script is required)
@@ -328,7 +328,7 @@ One can run this command to get notified as soon as Ingress is ready:
 while domain=$(kubectl get ingress jboss-cluster-replication-ingress \
 		-n containerized-apps -o jsonpath="{.status.loadBalancer.ingress[0].ip}"); \
 	[ -z "$domain" ]; \
-	do sleep .5; done && echo $domain
+	do echo -n . && sleep .5; done && echo $domain
 ```
 
 If one skips the 2 commands in the beginning of this section (3.3.1), one needs to run the following
@@ -591,6 +591,28 @@ first server load ratio=0.34 vs. min. 0.3 & max. 0.36666667 (requests handled: 1
 Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/4.replication-Kubernetes-scaling-and-retesting-demo.webm "Replication after scaling on Kubernetes & retesting demo WEBM video")
 (10m) providing an illustration of the steps in this sub-section (the last of of 4).
+
+## 5) Ultra-Super-Extra Credit: Deploying on Public Kubernetes Clouds Disabling Multicast 
+### 5.1) kube_ping branch
+The code has been updated to use KUBE_PING instead of MPING for clustering on the kube_ping branch
+of the project.
+### 5.2) E.g.: AKS
+It has been confirmed to work taking advantage of a free AKS trial (accessible 
+[here](http://jboss-replication-ha-demo.francecentral.cloudapp.azure.com:8080/jboss-cluster-ha-demo/)
+as of July 2025).
+#### 5.2.1) Automated testing
+But it is best to test in automated fashion by changing website variable in k8s-replication-test.sh 
+& rerunning the same test as in section 3.3.2.2):
+
+```console
+target/log/curl.20250708-091013.log
+Analyzing results...
+[/bin/sh, -c, grep "Resat est très bon" target/log/curl.20250708-091013.log | wc -l]
+Matches: 50
+50/50=100,00 %
+first server IP: 10.224.0.23
+first server load ratio=0.48 vs. min. 0.45 & max. 0.55 (requests handled: 24)
+```
 
 Hope you have had as much fun reading & pondering over this as I have had working on it
 & documenting it. :)

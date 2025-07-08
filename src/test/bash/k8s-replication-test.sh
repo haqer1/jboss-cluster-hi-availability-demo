@@ -1,8 +1,11 @@
-execId=$1; request_count=$2
+execId=$1; request_count=$2; website=$3
 if [ -z "$execId" ]; then
 	echo "Usage: $0 <execId/>"
 	exit 1
 fi
 
-website=load-balancing-replication-ingress-demo #192.168.49.2:32000
+if [ -z "$website" ]; then
+	website=jboss-replication-ha-demo.francecentral.cloudapp.azure.com:8080 #load-balancing-replication-ingress-demo
+fi
+
 src/test/bash/cluster-test-template.sh $execId $website $request_count

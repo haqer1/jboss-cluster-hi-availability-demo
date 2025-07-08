@@ -3,7 +3,7 @@ if [ -z "$execId" ] || [ -z "$website" ]; then
 	echo "Usage: $0 <execId/> <website/>"
 	exit 1
 fi
-#execId=$(date +%y-%m-%d_%H-%M-%S)
+#execId=$(date +%y%m%d_%H%M%S)
 
 put_logfile=target/log/curl.put.$execId.log
 cookie_jar=target/log/cookies/$execId.txt

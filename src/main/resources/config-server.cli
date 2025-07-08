@@ -1,0 +1,29 @@
+### start the server in admin-only mode & modify standalone-full-ha.xml
+embed-server --server-config=standalone-full-ha.xml --std-out=echo
+
+### tweaks server configs
+batch
+
+#/subsystem=logging/logger=org.openshift.ping:add()
+#/subsystem=logging/logger=org.openshift.ping:write-attribute(name=level, value=debug)
+#/subsystem=logging/logger=org.openshift.ping:add-handler(name=console)
+
+/subsystem=messaging-activemq/server=default/cluster-connection=my-cluster:write-attribute(name=reconnect-attempts,value=10)  
+/interface=bindall:add(inet-address=${env.POD_IP:0.0.0.0})  
+/socket-binding-group=standard-sockets/socket-binding=jgroups-tcp/:write-attribute(name=interface,value=private)  
+/socket-binding-group=standard-sockets/socket-binding=jgroups-tcp-fd/:write-attribute(name=interface,value=private)  
+/subsystem=jgroups/channel=ee:remove
+/subsystem=jgroups/channel=ee:add(stack=tcp)
+
+/subsystem=jgroups/stack=udp/protocol=PING:remove
+/subsystem=jgroups/stack=tcp/protocol=MPING:remove()
+/subsystem=jgroups/stack=tcp/protocol=kubernetes.KUBE_PING:add(add-index=0,properties={namespace=${env.KUBERNETES_NAMESPACE},labels=${env.KUBERNETES_LABELS},port_range=0,masterHost=kubernetes.default.svc,masterPort=${env.KUBERNETES_SERVICE_PORT}})
+/subsystem=jgroups/stack=udp/protocol=kubernetes.KUBE_PING:add(add-index=0,properties={namespace=${env.KUBERNETES_NAMESPACE},labels=${env.KUBERNETES_LABELS},port_range=0,masterHost=kubernetes.default.svc,masterPort=${env.KUBERNETES_SERVICE_PORT}})
+
+/socket-binding-group=standard-sockets/socket-binding=http/:write-attribute(name=interface,value=bindall)  
+/socket-binding-group=standard-sockets/socket-binding=https/:write-attribute(name=interface,value=bindall)  
+#/subystem=undertow/server=default-server/http-listener=default:write-attribute(name=proxy-address-forwarding, value=true)
+
+run-batch
+
+stop-embedded-server

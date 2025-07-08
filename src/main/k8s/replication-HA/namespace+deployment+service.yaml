@@ -3,6 +3,35 @@ kind: Namespace
 metadata:
   name: containerized-apps
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jgroups-kubeping-service-account
+  namespace: containerized-apps
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: jgroups-kubeping-pod-reader
+  namespace: containerized-apps
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: jgroups-kubeping-api-access
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: jgroups-kubeping-pod-reader
+subjects:
+- kind: ServiceAccount
+  name: jgroups-kubeping-service-account
+  namespace: containerized-apps
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,23 +51,20 @@ spec:
       labels:
         app: jboss-cluster-hi-availability-demo
       annotations:
-        v: v0.1
+        v: v0.9
     spec:
+      serviceAccountName: jgroups-kubeping-service-account
       containers:
       - name: jboss-cluster-hi-availability-demo
-        image: docker.io/adazes/jboss-cluster-hi-availability-demo:0.8
+        image: docker.io/adazes/jboss-cluster-hi-availability-demo:0.9
         imagePullPolicy: IfNotPresent
-        command: ["/bin/bash"]
-        args: ["-c", "ip=$(awk 'END{print $1}' /etc/hosts) && /opt/jboss/wildfly/bin/standalone.sh -Djboss.bind.address.management=$ip -Djboss.bind.address=$ip -Djboss.bind.address.private=$ip -Djboss.bind.address.unsecure=$ip -c standalone-full-ha.xml -u 230.0.0.4"]
+        command: ["/opt/jboss/wildfly/bin/standalone.sh"]
+        args: ["-Djboss.bind.address.management=$(POD_IP)", "-Djboss.bind.address=$(POD_IP)", "-Djboss.bind.address.private=$(POD_IP)", "-Djboss.bind.address.unsecure=$(POD_IP)", "-c", "standalone-full-ha.xml", "-Djboss.messaging.cluster.password=demoMQpasswd"]
         env:
         - name: POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
         - name: POD_IP
           valueFrom:
             fieldRef:
@@ -47,12 +73,21 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIPs
+        - name: KUBERNETES_LABELS 
+          value: app=jboss-cluster-hi-availability-demo
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
         ports: 
           - name: http
             containerPort: 8080
+          - containerPort: 9990
+          - containerPort: 7600
+          - containerPort: 8888
         resources:
           requests:
-            memory: "1024Mi"
+            memory: "256Mi"
           limits:
             memory: "1512Mi"
         livenessProbe:
