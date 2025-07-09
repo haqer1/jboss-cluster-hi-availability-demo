@@ -597,9 +597,12 @@ Feel free to also (download and) take a look at a WEBM
 The code has been updated to use KUBE_PING instead of MPING for clustering on the kube_ping branch
 of the project.
 ### 5.2) E.g.: AKS
-It has been confirmed to work taking advantage of a free AKS trial (accessible 
-[here](http://jboss-replication-ha-demo.francecentral.cloudapp.azure.com/jboss-cluster-ha-demo/)
-as of July 2025 (with Ingress load balancer fixed up as well as of July 9th, 15:40 😊)).
+It has been confirmed to work taking advantage of a free AKS trial. The app is accessible 
+over
+[https](https://jboss-replication-ha-demo.francecentral.cloudapp.azure.com/jboss-cluster-ha-demo/ "Secured with a self-issued certificate")
+as well as over
+[http](http://jboss-replication-ha-demo.francecentral.cloudapp.azure.com/jboss-cluster-ha-demo/)
+as of July 2025 (with Ingress load balancer fixed up as well as of July 9th, 15:40 😊).
 #### 5.2.1) Automated testing
 But it is best to test in automated fashion by changing website variable in k8s-replication-test.sh 
 & rerunning the same test as in section 3.3.2.2):
