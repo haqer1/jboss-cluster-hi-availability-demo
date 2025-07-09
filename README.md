@@ -598,8 +598,8 @@ The code has been updated to use KUBE_PING instead of MPING for clustering on th
 of the project.
 ### 5.2) E.g.: AKS
 It has been confirmed to work taking advantage of a free AKS trial (accessible 
-[here](http://jboss-replication-ha-demo.francecentral.cloudapp.azure.com:8080/jboss-cluster-ha-demo/)
-as of July 2025).
+[here](http://jboss-replication-ha-demo.francecentral.cloudapp.azure.com/jboss-cluster-ha-demo/)
+as of July 2025 (with Ingress load balancer fixed up as well as of July 9th, 15:40 😊)).
 #### 5.2.1) Automated testing
 But it is best to test in automated fashion by changing website variable in k8s-replication-test.sh 
 & rerunning the same test as in section 3.3.2.2):
