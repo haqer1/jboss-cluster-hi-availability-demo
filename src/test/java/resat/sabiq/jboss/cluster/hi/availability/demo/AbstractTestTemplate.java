@@ -15,6 +15,7 @@ import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -24,11 +25,15 @@ import java.util.concurrent.ExecutionException;
  */
 public abstract class AbstractTestTemplate {
 	protected static final int GET_REQUEST_COUNT = 50;
-	private static final float SUCCESS_RATIO_THRESHOLD = (float) 0.02;
+	private static final float SUCCESS_RATIO_THRESHOLD = (float) 1/GET_REQUEST_COUNT; // .02;
 	private static final class Paths {
 		private static final String LOG_DIR = "target/log/";
 		private static final String TEST_EXEC_ID_FILE = LOG_DIR + "testExecId.txt";
 	}
+	/**
+	 * {SCRIPT_FOLDER+script, execId, String.valueOf(GET_REQUEST_COUNT)};
+	 */
+	private static final byte TEST_CMD_ARRAY_MIN_LENGTH = 3;
 	private static final String SCRIPT_FOLDER = "src/test/bash/";
 
 	private static final DateTimeFormatter timestampFormatter
@@ -102,14 +107,25 @@ public abstract class AbstractTestTemplate {
 		return matchesCount;
 	}
 
-	protected int execTestScriptAndReturnMatchesCount(final String script)
-			throws IOException, InterruptedException, ExecutionException {
+	protected int execTestScriptAndReturnMatchesCount(final String script
+			, final Optional<String[]> additionalArgs)
+					throws IOException, InterruptedException, ExecutionException {
 		final String execId = generateTimestamp();
 		writeTestExecId(execId);
 		logFile = reusableLogfileFormatter.format(new Object[] {execId});
 		System.out.println(logFile);
-		final String[] testCmd
-			= new String[] {SCRIPT_FOLDER+script, execId, String.valueOf(GET_REQUEST_COUNT)};
+		int testCmdLength = TEST_CMD_ARRAY_MIN_LENGTH + (additionalArgs.isEmpty()
+				? 0 : additionalArgs.get().length);
+
+		final String[] testCmd = new String[testCmdLength];
+		testCmd[0] = SCRIPT_FOLDER+script;
+		testCmd[1] = execId;
+		testCmd[2] = String.valueOf(GET_REQUEST_COUNT);
+		additionalArgs.ifPresent((String[] additionalArguments) -> {
+			for (int i = TEST_CMD_ARRAY_MIN_LENGTH; i < testCmdLength; i++)
+				testCmd[i] = additionalArguments[i-TEST_CMD_ARRAY_MIN_LENGTH];
+		});
+
 		final Process p = runtime.exec(testCmd);
 		p.onExit().get();
 

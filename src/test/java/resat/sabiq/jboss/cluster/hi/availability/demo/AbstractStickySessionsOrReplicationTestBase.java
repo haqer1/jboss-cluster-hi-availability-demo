@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,12 +21,22 @@ abstract class AbstractStickySessionsOrReplicationTestBase extends AbstractTestT
 	private static final Pattern ipPattern = Pattern.compile(">((\\d{1,3}+\\.){3}\\d{1,3}+)<");
 	private static final byte IP_GROUP = 1;
 
-	private String script, assertionFailureMsg;
+	private final String script, assertionFailureMsg;
+	private final Optional<String[]> additionalArgs;
 
 	protected AbstractStickySessionsOrReplicationTestBase(String script
 			, String assertionFailureMsg) {
+		this(script, Optional.empty(), assertionFailureMsg);
+	}
+
+	/**
+	 * @param	additionalArgs	args to follow exec. ID & request count, if any
+	 */
+	protected AbstractStickySessionsOrReplicationTestBase(String script
+			, Optional<String[]> additionalArgs, String assertionFailureMsg) {
 		this.script = script;
 		this.assertionFailureMsg = assertionFailureMsg;
+		this.additionalArgs = additionalArgs;
 	}
 
 	protected int calculateCountOfRequestsHandledByServerInstanceThatHandled1stRequest()
@@ -65,7 +76,7 @@ abstract class AbstractStickySessionsOrReplicationTestBase extends AbstractTestT
 	void givenSessionWithData_whenNumerousRequests_allRequestsHaveSessionData()
 			throws IOException, InterruptedException, ExecutionException {
 		final int matchesCount
-			= execTestScriptAndReturnMatchesCount(script);
+			= execTestScriptAndReturnMatchesCount(script, additionalArgs);
 		float successRatio = toSuccessRatio(matchesCount);
 		System.out.println(String.valueOf(matchesCount)+ '/' +GET_REQUEST_COUNT+ '='
 				+percentFormat.format(successRatio));

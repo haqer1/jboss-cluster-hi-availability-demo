@@ -3,6 +3,7 @@ package resat.sabiq.jboss.cluster.hi.availability.demo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.Test;
@@ -24,10 +25,10 @@ class NoStickySessionNoReplicationTest extends AbstractTestTemplate {
 	@Test
 	void givenSessionWithData_whenNumerousRequests_someRequestsDontHaveSessionData()
 			throws IOException, InterruptedException, ExecutionException {
-		final int matchesCount
-			= execTestScriptAndReturnMatchesCount("no-sticky-sessions-no-replication-test.sh");
-		System.out.printf("Success rate < 100%% as expected for %d requests: %s%n", GET_REQUEST_COUNT,
-				percentFormat.format(toSuccessRatio(matchesCount)));
+		final int matchesCount = execTestScriptAndReturnMatchesCount(
+									"no-sticky-sessions-no-replication-test.sh", Optional.empty());
+		System.out.printf("Success rate < 100%% as expected for %d requests: %s%n"
+				, GET_REQUEST_COUNT, percentFormat.format(toSuccessRatio(matchesCount)));
 		assertTrue(matchesCount < GET_REQUEST_COUNT, DATA_PRESENCE_ERR_MSG);
 	}
 }

@@ -3,6 +3,7 @@ package resat.sabiq.jboss.cluster.hi.availability.demo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -41,8 +42,16 @@ abstract class AbstractReplicationTest extends AbstractStickySessionsOrReplicati
 
 	private short numberOfServerInstances;
 
-	public AbstractReplicationTest(final String script, short numberOfServerInstances) {
-		super(script, DATA_REPLICATION_ERR_MSG);
+	protected AbstractReplicationTest(final String script, short numberOfServerInstances) {
+		this(script, Optional.empty(), numberOfServerInstances);
+	}
+
+	/**
+	 * @param	additionalArgs	args to follow exec. ID & request count, if any
+	 */
+	protected AbstractReplicationTest(String script
+			, Optional<String[]> additionalArgs, short numberOfServerInstances) {
+		super(script, additionalArgs, DATA_REPLICATION_ERR_MSG);
 		this.numberOfServerInstances = numberOfServerInstances;
 	}
 
