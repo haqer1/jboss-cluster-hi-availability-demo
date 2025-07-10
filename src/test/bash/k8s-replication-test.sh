@@ -5,7 +5,7 @@ if [ -z "$execId" ]; then
 fi
 
 if [ -z "$website" ]; then
-	website=jboss-replication-ha-demo.francecentral.cloudapp.azure.com:8080 #load-balancing-replication-ingress-demo
+	website=load-balancing-replication-ingress-demo
 fi
 
 src/test/bash/cluster-test-template.sh $execId $website $request_count
