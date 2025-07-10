@@ -4,9 +4,11 @@ if [ -z "$execId" ] || [ -z "$website" ]; then
 	exit 1
 fi
 
+website=$(src/test/bash/ensure-http-or-https.sh $website)
+
 put_logfile=target/log/curl.put.$execId.log
 cookie_jar=target/log/cookies/$execId.txt
-curl -c $cookie_jar "http://$website/jboss-cluster-ha-demo/index.jsp" \
+curl -c $cookie_jar "$website/jboss-cluster-ha-demo/index.jsp" \
  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' \
  -H 'Cache-Control: no-cache' \
  -H 'Connection: keep-alive' \
