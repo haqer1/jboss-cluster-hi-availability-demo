@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jboss-cluster-replication-ingress-http-only
+  namespace: containerized-apps
+spec:
+  ingressClassName: azure-application-gateway
+  rules:
+    - host: jboss-replication-ha-demo.francecentral.cloudapp.azure.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jboss-cluster-hi-availability-service-demo
+                port:
+                  number: 8080
