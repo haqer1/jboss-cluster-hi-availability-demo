@@ -13,3 +13,6 @@ agicAddonIdentity=$(az aks show -n $AKS_CLUSTER_NAME -g $RESOURCE_GROUP_NAME -o 
 # Assign network contributor role to AGIC addon ID to subnet that contains the Application Gateway
 az role assignment create --assignee $agicAddonIdentity --scope $appGatewaySubnetId \
 	--role "Network Contributor"
+
+# Optional
+az role assignment list --assignee $agicAddonIdentity --scope $appGatewaySubnetId
