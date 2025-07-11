@@ -615,7 +615,7 @@ Please see the
 
 #### 5.2.2) Automated testing
 It is best to test in automated fashion by passing website as 3rd argument to
-k8s-replication-test.sh or rather running the following test, similar to section 3.3.2):
+k8s-replication-test.sh or rather running the following test, similar to section [3.3.2)](#332-automated-testing):
 
 ```console
 mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.KubernetesBasedReplicationTestAgainstAKS test
