@@ -101,7 +101,7 @@ AKS_CLUSTER_NAME=C4
 ```console
 az aks get-credentials --resource-group $RESOURCE_GROUP_NAME --name $AKS_CLUSTER_NAME
 ```
-### 5.2.1.2.3) Waiting for readiness
+### 5.2.1.2.3) Waiting for Readiness
 Could take several minutes...
 
 ```console
@@ -119,7 +119,7 @@ while \
 ```console
 kubectl describe nodes | grep arch
 ```
-### 5.2.1.2.5) Verify AGIC ready
+### 5.2.1.2.5) Verify AGIC Ready
 ```console
 kubectl get all --all-namespaces | grep ingress
 
@@ -129,13 +129,13 @@ while \
 	do echo -n . && sleep .5; done && echo && echo $running
 ```
 
-#### 5.2.1.2.5.1) If not running
+#### 5.2.1.2.5.1) If Not Running
 ```console
 az network application-gateway start --name ingress-appgateway \
 	--resource-group $RESOURCE_GROUP_NAME
 ```
 
-#### 5.2.1.2.5.2) If running
+#### 5.2.1.2.5.2) If Running
 
 ##### 5.2.1.2.5.2.1) According to documentation this is required for AGIC config.
 ```console
@@ -155,39 +155,42 @@ az network application-gateway show --name ingress-appgateway --resource-group $
 	--query operationalState
 ```
 
-##### 5.2.1.2.5.2.4) Backends.
+##### 5.2.1.2.5.2.4) Backends: before app deployment.
 ```console
 az network application-gateway show --name ingress-appgateway --resource-group $RG \
 	--query backendAddressPools
-
-kubectl describe endpoints jboss-cluster-hi-availability-service-demo \
-	-n containerized-apps | grep Addresses
 ```
 
-### 5.2.1.2.6) Deploy main artifacts
+### 5.2.1.2.6) Deploy Main Artifacts
 ```console
 kubectl apply -f src/main/k8s/replication-HA/namespace+deployment+service.yaml
 
 src/main/bash/post-deployment.sh
 ```
+#### 5.2.1.2.6.1) Backends: After App Deployment
+One can compare with backends before app deployment:
 
-### 5.2.1.2.7) Certificate for dev/test
+```console
+kubectl describe endpoints jboss-cluster-hi-availability-service-demo \
+	-n containerized-apps | grep Addresses
+````
+### 5.2.1.2.7) Certificate for Dev/Test
 ```console
 src/test/bash/site/generate-crt-tls-secret.sh 1 1
 ```
-#### 5.2.1.2.7.1) HTTPS load balancer.
+#### 5.2.1.2.7.1) HTTPS Load Balancer.
 ```console
 kubectl apply -f src/main/k8s/ingress/provider/az/load-balancing.yaml
 ```
 
-### 5.2.1.2.8) Optionally: HTTP load balancer (for troubleshooting & comparison only)
+### 5.2.1.2.8) Optionally: HTTP Load Balancer (for troubleshooting & comparison only)
 During dev, etc.:
 
 ```console
 kubectl apply -f src/main/k8s/ingress/provider/az/load-balancing-minus-https.yaml
 ```
 
-### 5.2.1.2.9) Update IP with DNS name:
+### 5.2.1.2.9) Update IP with DNS Name:
 ```console
 lbip=$(while domain=$(kubectl get ingress jboss-cluster-replication-ingress \
         -n containerized-apps -o jsonpath="{.status.loadBalancer.ingress[0].ip}"); \
@@ -199,7 +202,7 @@ src/test/bash/provider/az/subdomain.sh
 ```
 	jboss-replication-ha-demo.francecentral.cloudapp.azure.com
 
-### 5.2.1.2.10) Video: on AKS setup.
+### 5.2.1.2.10) Video: on AKS Setup.
 Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/5.2.1.JBoss-replication-setup-AKS-demo.webm "JBoss Replication Setup on AKS demo WEBM video")
 (20m 55s) providing an illustration of major steps in this sub-section (5.2.1).
