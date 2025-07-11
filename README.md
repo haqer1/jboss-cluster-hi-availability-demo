@@ -645,6 +645,11 @@ local k8s deployment, after setting the data in put.jsp, the data will be availa
 requests (to get.jsp, etc.) on all server containers in the cluster (thanks to replication)... Thus,
 a crash of container, for instance, will be handled gracefully.
 
+#### 5.2.4) Video: automated testing & using from browser
+Feel free to also (download and) take a look at a WEBM
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/5.2.2-5.2.3.replication-AKS-auto-testing-and-using-from-browser-demo.webm "JBoss Replication on AKS: automated testing & using from browser demo WEBM video")
+(15m 59s) providing an illustration of steps in sub-sections 5.2.2 & 5.2.3.
+
 Hope you have had as much fun reading & pondering over this as I have had working on it
 & documenting it. :)
 
