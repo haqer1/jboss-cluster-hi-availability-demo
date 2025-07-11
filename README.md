@@ -96,7 +96,8 @@ Analyzing results...
 [/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250701-112207.log | wc -l]  
 Matches: 24  
 Success rate < 100% as expected for 50 requests: 48,00 %  
-[INFO] **Tests run: 1**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 48.71 s
+[INFO] **Tests run: 1**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 48.71 s  
+[INFO] **BUILD SUCCESS**
 
 ### 1.4) Using from browser
 You can also use the webapp
@@ -114,7 +115,7 @@ in sections 2) & 3)...
 ### 1.5) Video
 Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/1.load-balancing-demo.webm "Load-Balancing demo WEBM video")
-(11m 54s) providing an illustration of the steps in this section (the 1st of 4).
+(11m 54s) providing an illustration of the steps in this section (the 1st of 5).
 
 ## 2) Sticky Sessions (without replication)
 
@@ -150,7 +151,8 @@ Analyzing results...
 [/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250630-163848.log | wc -l]
 Matches: 50  
 50/50=100,00 %  
-[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 101.7 s
+[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 101.7 s  
+[INFO] **BUILD SUCCESS**
 
 ### 2.2) Using from browser
 You can also use the webapp
@@ -161,7 +163,7 @@ container (based on cookie-based affinity)...
 ### 2.3) Video
 Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/2.sticky-sessions-demo.webm "Sticky Sessions demo WEBM video")
-(11m 11s) providing an illustration of the steps in this section (the 2nd of 4).
+(11m 11s) providing an illustration of the steps in this section (the 2nd of 5).
 
 ## 3) Replication
 One might want to (re)build build the app, in case there have been any changes (or build it for the
@@ -252,7 +254,8 @@ Matches: 50
 50/50=100,00 %  
 first server IP: 172.28.5.4  
 first server load ratio=0.34 vs. min. 0.3 & max. 0.36666667 (requests handled: 17)  
-[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.74 s
+[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.74 s  
+[INFO] **BUILD SUCCESS**
 
 #### 3.2.2) Using from browser
 You can also use the webapp
@@ -263,7 +266,7 @@ will be available for subsequent requests (to get.jsp, etc.) on all server conta
 #### 3.2.3) Video
 Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/3.2.replication-pure-Docker-demo.webm "Replication on pure Docker demo WEBM video")
-(14m 28s) providing an illustration of the steps in this sub-section (the 3rd of 4) (this being the
+(14m 28s) providing an illustration of the steps in this sub-section (the 3rd of 5) (this being the
 1st of 3 videos for section 3).
 
 ### 3.3) Replication on Kubernetes
@@ -298,8 +301,12 @@ deployment.apps/jboss-cluster-hi-availability-demo created
 service/jboss-cluster-hi-availability-service-demo created
 
 Confirm deployments' status via commands like
-(the 3rd one letting know as soon as the solution is ready to use):
+(the 1st & 4th ones letting know as soon as the solution is ready to use (the 1st also showing
+service IP address)):
 
+```console
+src/main/bash/post-deployment.sh
+```
 ```console
 kubectl get all -n containerized-apps
 
@@ -352,7 +359,7 @@ As we can see in the following sub-sections, the results are similar with and wi
 perhaps also due to the fact that the service itself is of `type: LoadBalancer`. That said, in
 production one would be more likely to use Ingress or something platform-specific...
 
-##### 3.3.2.1) Results without Ingress
+##### 3.3.2.1) Results without Ingress.
 > [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.[KubernetesBasedReplicationTest](src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/KubernetesBasedReplicationTest.java)  
 target/log/curl.20250701-172147.log  
 Analyzing results...  
@@ -361,9 +368,10 @@ Matches: 50
 50/50=100,00 %  
 first server IP: 10.244.0.14  
 first server load ratio=0.54 vs. min. 0.45 & max. 0.55 (requests handled: 27)  
-[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.74 s
+[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.74 s  
+[INFO] **BUILD SUCCESS**
 
-##### 3.3.2.2) Results with Ingress
+##### 3.3.2.2) Results with Ingress.
 > [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.[KubernetesBasedReplicationTest](src/test/java/resat/sabiq/jboss/cluster/hi/availability/demo/KubernetesBasedReplicationTest.java)  
 target/log/curl.20250704-001921.log  
 Analyzing results...  
@@ -372,7 +380,8 @@ Matches: 50
 50/50=100,00 %  
 first server IP: 10.244.0.30  
 first server load ratio=0.52 vs. min. 0.45 & max. 0.55 (requests handled: 26)  
-[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.70 s
+[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.70 s  
+[INFO] **BUILD SUCCESS**
 
 #### 3.3.3) Using from browser
 You can also use the webapp
@@ -383,7 +392,7 @@ requests (to get.jsp, etc.) on all server containers in the cluster (thanks to r
 #### 3.3.4) Video
 Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/3.3.replication-Kubernetes-demo.webm "Replication on Kubernetes demo WEBM video")
-(19m 51s) providing an illustration of the steps in this sub-section (the 3rd of 4) (this being the
+(19m 51s) providing an illustration of the steps in this sub-section (the 3rd of 5) (this being the
 2nd of 3 videos for section 3).
 
 ### 3.4) Extra Credit: Replication of Data Deletion
@@ -533,12 +542,12 @@ across the cluster:
 #### 3.4.1) Video
 Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/3.4.replication-of-deletion-Kubernetes-demo.webm "Replication of deletion on Kubernetes demo WEBM video")
-(6m 19s) providing an illustration of the steps in this sub-section (the 3rd of 4) (this being the
+(6m 19s) providing an illustration of the steps in this sub-section (the 3rd of 5) (this being the
 3rd & last of 3 videos for section 3).
 
 ## 4) Super-Extra Credit: Scaling (& Retesting) (on Kubernetes)
 Scaling up (or, subsequently, down) & retesting is really in the category of super-extra credit, but
-here here goes scaling up & restesting anyway. :)
+here goes scaling up & restesting anyway. :)
 
 ```console
 kubectl get pods -o wide -n containerized-apps
@@ -585,37 +594,56 @@ Matches: 50
 50/50=100,00 %  
 first server IP: 10.244.0.30  
 first server load ratio=0.34 vs. min. 0.3 & max. 0.36666667 (requests handled: 17)  
-[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.82 s
+[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.82 s  
+[INFO] **BUILD SUCCESS**
 
 ### 4.2) Video
 Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/4.replication-Kubernetes-scaling-and-retesting-demo.webm "Replication after scaling on Kubernetes & retesting demo WEBM video")
-(10m) providing an illustration of the steps in this sub-section (the last of of 4).
+(10m) providing an illustration of the steps in this sub-section (the 4th of 5).
 
 ## 5) Ultra-Super-Extra Credit: Deploying on Public Kubernetes Clouds Disabling Multicast 
 ### 5.1) kube_ping branch
 The code has been updated to use KUBE_PING instead of MPING for clustering on the kube_ping branch
 of the project.
 ### 5.2) E.g.: AKS
-It has been confirmed to work taking advantage of a free AKS trial. The app is accessible 
-over
-[https](https://jboss-replication-ha-demo.francecentral.cloudapp.azure.com/jboss-cluster-ha-demo/ "Secured with a self-issued certificate")
-as well as over
-[http](http://jboss-replication-ha-demo.francecentral.cloudapp.azure.com/jboss-cluster-ha-demo/)
-as of July 2025 (with Ingress load balancer fixed up as well as of July 9th, 15:40 😊).
-#### 5.2.1) Automated testing
-But it is best to test in automated fashion by changing website variable in k8s-replication-test.sh 
-& rerunning the same test as in section 3.3.2.2):
+The code has been confirmed to work taking advantage of a free AKS trial (during July 2025).
+
+#### 5.2.1) Setup (Building & Deploying) on AKS
+Please see the
+[JBoss Cluster High Availability Demo on AKS (taking advantage of free trial)](doc/provider/AKS.md).
+
+#### 5.2.2) Automated testing
+It is best to test in automated fashion by passing website as 3rd argument to
+k8s-replication-test.sh or rather running the following test, similar to section 3.3.2):
 
 ```console
-target/log/curl.20250708-091013.log
-Analyzing results...
-[/bin/sh, -c, grep "Resat est très bon" target/log/curl.20250708-091013.log | wc -l]
-Matches: 50
-50/50=100,00 %
-first server IP: 10.224.0.23
-first server load ratio=0.48 vs. min. 0.45 & max. 0.55 (requests handled: 24)
+mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.KubernetesBasedReplicationTestAgainstAKS test
 ```
+
+> [INFO] Running resat.sabiq.jboss.cluster.hi.availability.demo.**KubernetesBasedReplicationTestAgainstAKS**  
+target/log/curl.20250710-213818.log  
+Analyzing results...  
+[/bin/sh, -c, grep "*Resat est très bon*" target/log/curl.20250710-213818.log | wc -l]  
+Matches: 50  
+50/50=100,00 %  
+first server IP: 10.224.0.23  
+first server load ratio=0.5 vs. min. 0.45 & max. 0.55 (requests handled: 25)  
+[INFO] **Tests run: 2**, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 61.42 s  
+[INFO] **BUILD SUCCESS**
+
+Note that 50 requests to a remote website above have taken about 14 additional seconds in comparison
+to testing against localhost (i.e., + 280ms per request).
+#### 5.2.3) Using from browser
+ The app is accessible 
+over
+[https](https://jboss-replication-ha-demo.francecentral.cloudapp.azure.com/jboss-cluster-ha-demo/ "Acceptance of a self-issued certificate for encryption required")
+as well as over
+[http](http://jboss-replication-ha-demo.francecentral.cloudapp.azure.com/jboss-cluster-ha-demo/)
+as of July 2025 (with Ingress load balancer fixed up as well as of July 9th, 15:40 😊): just as for
+local k8s deployment, after setting the data in put.jsp, the data will be available for subsequent
+requests (to get.jsp, etc.) on all server containers in the cluster (thanks to replication)... Thus,
+a crash of container, for instance, will be handled gracefully.
 
 Hope you have had as much fun reading & pondering over this as I have had working on it
 & documenting it. :)
