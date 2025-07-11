@@ -199,6 +199,12 @@ src/test/bash/provider/az/subdomain.sh
 ```
 	jboss-replication-ha-demo.francecentral.cloudapp.azure.com
 
+### 5.2.1.2.10) Video: on AKS setup.
+Feel free to also (download and) take a look at a WEBM
+[video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/5.2.1.JBoss-replication-setup-AKS-demo.webm "JBoss Replication Setup on AKS demo WEBM video")
+(20m 55s) providing an illustration of major steps in this sub-section (5.2.1).
+
 Next: automated testing & using from browser (+video).
-Please see sections [5.2.2](../../README.md#522-automated-testing) &
-[5.2.3](../../README.md#523-using-from-browser).
+Please see sections [5.2.2](../../README.md#522-automated-testing),
+[5.2.3](../../README.md#523-using-from-browser) &
+[5.2.4](../../README.md#524-video-automated-testing--using-from-browser) of the main page.
