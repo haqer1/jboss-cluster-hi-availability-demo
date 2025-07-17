@@ -2,6 +2,8 @@
 This demo covers the topics of clustering, load balancing, sticky sessions &amp; high availability
 on JBoss (WildfFly).
 
+As you know, essentially, via a cluster with sticky sessions, the system gains capability to handle (much) larger work load, in comparison to a single server. And in a cluster with replication, the system gains capability to handle (much) larger work load & high availability: i.e., if a member of a cluster (a container in k8s), fails, the clients (or client systems) will not notice or experience any negative effect because the rest of the cluster will fulfill the work of the member of the cluster that had failed (a container in k8s) (in k8s a new container would also automatically be started to replace the one that would have failed).
+
 The demo app puts cookies in session in put.jsp, & then tests that they can be retrieved in get.jsp,
 in the context of clusters with several server containers.
 
@@ -12,8 +14,8 @@ minikube start -p jboss-cluster-hi-availability-demo \
 minikube profile jboss-cluster-hi-availability-demo # set profile
 ```
 
-Before reading any or all of the 4 sections, please keep in mind that during or after automated
-testing doable in each of the 4 sections you can optionally **view logs** as follows:
+Before reading any or all of the 5 sections, please keep in mind that during or after automated
+testing doable in each of the 5 sections you can optionally **view logs** as follows:
 
 ```shell
 cat target/log/curl.put.$(cat target/log/testExecId.txt).log
@@ -600,7 +602,7 @@ first server load ratio=0.34 vs. min. 0.3 & max. 0.36666667 (requests handled: 1
 ### 4.2) Video
 Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/4.replication-Kubernetes-scaling-and-retesting-demo.webm "Replication after scaling on Kubernetes & retesting demo WEBM video")
-(10m) providing an illustration of the steps in this sub-section (the 4th of 5).
+(10m) providing an illustration of the steps in this sub-section (the 4th of 5) (please note that after this video was made section 5 was added).
 
 ## 5) Ultra-Super-Extra Credit: Deploying on Public Kubernetes Clouds Disabling Multicast 
 ### 5.1) kube_ping branch
@@ -615,7 +617,7 @@ Please see the
 
 #### 5.2.2) Automated testing
 It is best to test in automated fashion by passing website as 3rd argument to
-k8s-replication-test.sh or rather running the following test, similar to section [3.3.2)](#332-automated-testing):
+k8s-replication-test.sh or rather by running the following test, similar to section [3.3.2)](#332-automated-testing):
 
 ```console
 mvn -Dtest=resat.sabiq.jboss.cluster.hi.availability.demo.KubernetesBasedReplicationTestAgainstAKS test
@@ -633,7 +635,7 @@ first server load ratio=0.5 vs. min. 0.45 & max. 0.55 (requests handled: 25)
 [INFO] **BUILD SUCCESS**
 
 Note that 50 requests to a remote website above have taken about 14 additional seconds in comparison
-to testing against localhost (i.e., + 280ms per request).
+to testing against k8s cluster on localhost (i.e., + 280ms per request).
 #### 5.2.3) Using from browser
  The app is accessible 
 over
@@ -650,7 +652,7 @@ Feel free to also (download and) take a look at a WEBM
 [video](https://github.com/haqer1/jboss-cluster-hi-availability-demo/raw/refs/heads/master/assets/video/5.2.2-5.2.3.replication-AKS-auto-testing-and-using-from-browser-demo.webm "JBoss Replication on AKS: automated testing & using from browser demo WEBM video")
 (15m 59s) providing an illustration of steps in sub-sections 5.2.2 & 5.2.3.
 
-Hope you have had as much fun reading & pondering over this as I have had working on it
+Hope you have had as much fun reading & pondering over all this as I have had working on it
 & documenting it. :)
 
 Au revoir.
